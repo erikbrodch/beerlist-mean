@@ -33,14 +33,29 @@ app.get('/beers', function (req, res) {
 });*/
 app.use(bodyParser.json());   // This is the type of body we're interested in
 app.use(bodyParser.urlencoded({extended: false}));
+console.log('we got to thte server')
 
 app.post('/beers', function (req, res, next) {
+
   var beer = new Beer(req.body);
 
   beer.save(function(err, beer) {
     if (err) {return next(err); }
-
+    console.log('got to the save')
     res.json(beer);
+    console.log(req.body);
   });
 });
+
+app.post('/beersremove', function (req, res, next) {
+Beer.findById(req.body._id, function(err, beer) {
+  beer.remove(function(err) {
+    if (err) throw err;
+    res.end();
+});
+  
+  });
+ });
+
+
 app.listen(4000);//creating local storage and make him listen
